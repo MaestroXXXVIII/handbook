@@ -5,10 +5,20 @@ description = "Add your description here"
 requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.16.2",
+    "asyncpg>=0.30.0",
     "dishka>=1.6.0",
     "environs>=14.2.0",
     "fastapi>=0.115.13",
+    "pre-commit>=4.2.0",
     "sqlalchemy>=2.0.41",
     "structlog>=25.4.0",
     "uvicorn>=0.34.3",
 ]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.16.1",
+]
+
+[tool.isort]
+profile = "black"

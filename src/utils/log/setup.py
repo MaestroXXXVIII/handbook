@@ -39,7 +39,8 @@ def configure_logging(enable_json_logs: bool = False) -> None:
     ]
 
     structlog.configure(
-        processors=shared_processors + [structlog.stdlib.ProcessorFormatter.wrap_for_formatter],
+        processors=shared_processors
+        + [structlog.stdlib.ProcessorFormatter.wrap_for_formatter],
         logger_factory=structlog.stdlib.LoggerFactory(),
         # call log with await syntax in thread pool executor
         wrapper_class=structlog.stdlib.AsyncBoundLogger,

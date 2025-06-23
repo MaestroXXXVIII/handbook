@@ -1,49 +1,10 @@
-import dataclasses
+from dataclasses import dataclass
 
 from environs import Env
 from sqlalchemy import URL
 
 
-@dataclasses.dataclass(frozen=True, slots=True)
-class RedisConfig:
-    """
-    Redis configuration class.
-    Attributes
-    ----------
-    password : Optional(str)
-        The password used to authenticate with Redis.
-    port : Optional(int)
-        The port where Redis server is listening.
-    host : Optional(str)
-        The host where Redis server is located.
-    """
-
-    host: str | None
-    port: int | None
-    password: str | None
-
-    @staticmethod
-    def from_env(env: Env) -> 'RedisConfig':
-        """
-        Creates the RedisConfig object from environment variables.
-        """
-        password = env.str('REDIS_PASSWORD', None)
-        port = env.int('REDIS_PORT', None)
-        host = env.str('REDIS_HOST', None)
-        return RedisConfig(password=password, port=port, host=host)
-
-    @property
-    def construct_redis_dsn(self) -> str:
-        """
-        Constructs and returns a Redis DSN (Data Source Name) for this database configuration.
-        """
-        if self.password:
-            return f'redis://:{self.password}@{self.host}:{self.port}/0'
-        else:
-            return f'redis://{self.host}:{self.port}/0'
-
-
-@dataclasses.dataclass(frozen=True, slots=True)
+@dataclass(frozen=True, slots=True)
 class DbConfig:
     """
     Database configuration class.
@@ -123,43 +84,7 @@ class DbConfig:
         return uri.render_as_string(hide_password=False)
 
 
-@dataclasses.dataclass(frozen=True, slots=True)
-class SMTPConfig:
-    host: str
-    port: int
-    password: str
-    email: str
-    TLS: bool = True
-
-    @staticmethod
-    def from_env(env: Env) -> 'SMTPConfig':
-        host = env.str('SMTP_HOST')
-        port = env.int('SMTP_PORT')
-        password = env.str('SMTP_PASS')
-        email = env.str('SMTP_EMAIL')
-        return SMTPConfig(
-            host=host,
-            port=port,
-            password=password,
-            email=email,
-        )
-
-
-@dataclasses.dataclass(frozen=True, slots=True)
-class Miscellaneous:
-    """
-    Miscellaneous settings class.
-    This class holds settings that don't fit into other categories.
-    """
-
-    pass
-
-    @staticmethod
-    def from_env(env: Env) -> 'Miscellaneous':
-        pass
-
-
-@dataclasses.dataclass(frozen=True, slots=True)
+@dataclass(frozen=True, slots=True)
 class Config:
     """
     The main configuration class that integrates all the other configuration classes.
