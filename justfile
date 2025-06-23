@@ -3,7 +3,7 @@ help:
     just -l
 # Install package with dependencies
 install:
-	poetry install --with dev
+	uv sync
 # Run pre-commit
 lint:
 	@pre-commit run --all-files

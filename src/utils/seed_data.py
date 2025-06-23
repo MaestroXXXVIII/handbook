@@ -30,13 +30,13 @@ async def seed():
 
             org1 = OrganizationModel(
                 title="Рога и Копыта",
-                phone="2-222-222",
+                phone="+79999999999",
                 building_id=building1.id,
                 activity_id=meat.id,
             )
             org2 = OrganizationModel(
                 title="Ферма Солнце",
-                phone="3-333-333",
+                phone="+79888888888",
                 building_id=building2.id,
                 activity_id=milk.id,
             )
