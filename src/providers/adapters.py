@@ -11,6 +11,8 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from src.config import Config, DbConfig
+from src.features.organization.domain.repository import IOrganizationRepository
+from src.infrastructure.repository import OrganizationRepository
 
 
 class SqlalchemyProvider(Provider):
@@ -19,8 +21,12 @@ class SqlalchemyProvider(Provider):
         return create_async_engine(config.db.construct_sqlalchemy_url)
 
     @provide(scope=Scope.APP)
-    def provide_sessionmaker(self, engine: AsyncEngine) -> async_sessionmaker[AsyncSession]:
-        return async_sessionmaker(bind=engine, expire_on_commit=False, class_=AsyncSession)
+    def provide_sessionmaker(
+        self, engine: AsyncEngine
+    ) -> async_sessionmaker[AsyncSession]:
+        return async_sessionmaker(
+            bind=engine, expire_on_commit=False, class_=AsyncSession
+        )
 
     @provide(scope=Scope.REQUEST, provides=AsyncSession)
     async def provide_session(
@@ -44,3 +50,11 @@ class ConfigProvider(Provider):
         return Config(
             db=DbConfig.from_env(env),
         )
+
+
+class RepositoryProvider(Provider):
+    scope = Scope.REQUEST
+
+    organization_repository = provide(
+        source=OrganizationRepository, provides=IOrganizationRepository
+    )
